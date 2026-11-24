@@ -1,0 +1,36 @@
+C4Component
+    title Nivel 3 - Componentes de MS-Conductores
+
+    Container(gw, "API Gateway / BFF", "Node.js + Express", "Entrada de peticiones")
+    Container(msenv, "MS-Envíos", "Node.js + Express", "Estado de envíos")
+    Container(msflo, "MS-Flota", "Node.js + Express", "Estado de vehículos")
+    ContainerDb(db, "BD Conductores", "PostgreSQL", "Esquema conductores")
+
+    Container_Boundary(ms, "MS-Conductores") {
+        Component(cctrl, "ConductorController", "Express Router", "CRUD de conductores y licencias")
+        Component(actrl, "AsignacionController", "Express Router", "Crear, finalizar y cancelar asignaciones")
+        Component(csvc, "ConductorService", "Servicio de dominio", "Reglas de registro y renovación de licencia")
+        Component(asvc, "AsignacionService", "Servicio de dominio", "Orquesta la asignación y compensa si falla un paso")
+        Component(val, "ValidadorAsignacion", "Reglas de negocio", "Licencia vigente, conductor libre, categoría suficiente, vehículo disponible")
+        Component(lic, "LicenciaScheduler", "Tarea programada", "Detecta licencias vencidas o por vencer")
+        Component(crepo, "ConductorRepository", "Acceso a datos", "Consultas sobre conductor y licencia")
+        Component(arepo, "AsignacionRepository", "Acceso a datos", "Consultas sobre asignacion")
+        Component(envcli, "EnviosClient", "HTTP client", "Consume MS-Envíos")
+        Component(flocli, "FlotaClient", "HTTP client", "Consume MS-Flota")
+    }
+
+    Rel(gw, cctrl, "Invoca", "REST")
+    Rel(gw, actrl, "Invoca", "REST")
+    Rel(cctrl, csvc, "Usa")
+    Rel(actrl, asvc, "Usa")
+    Rel(asvc, val, "Valida reglas")
+    Rel(val, crepo, "Consulta licencia y estado")
+    Rel(asvc, arepo, "Persiste asignación")
+    Rel(asvc, envcli, "Valida y actualiza envío")
+    Rel(asvc, flocli, "Valida y actualiza vehículo")
+    Rel(csvc, crepo, "Usa")
+    Rel(lic, crepo, "Consulta vencimientos")
+    Rel(crepo, db, "Lee/escribe", "SQL")
+    Rel(arepo, db, "Lee/escribe", "SQL")
+    Rel(envcli, msenv, "PATCH /envios/{id}/estado", "REST")
+    Rel(flocli, msflo, "PATCH /vehiculos/{id}/estado", "REST")

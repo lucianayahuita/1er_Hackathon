@@ -1,0 +1,18 @@
+C4Context
+    title Nivel 1 - Contexto del Sistema Integral de Gestión Logística (Transporte y Logística Andina S.R.L.)
+
+    Person(op, "Operador logístico", "Registra y consulta envíos, conductores y entregas")
+    Person(af, "Administrador de flota", "Gestiona vehículos y su estado operativo")
+    Person(de, "Despachador", "Asigna conductor y vehículo a cada envío")
+    Person(co, "Conductor", "Confirma entregas y sube evidencia fotográfica")
+    Person(ge, "Gerencia / Directorio", "Consulta indicadores y estado de la operación")
+    Person(dest, "Destinatario", "Consulta el seguimiento de su envío por código")
+
+    System(sis, "Sistema Integral de Gestión Logística", "Plataforma web basada en microservicios para administrar envíos, flota, conductores y entregas")
+
+    Rel(op, sis, "Registra envíos, conductores y consulta estados", "HTTPS")
+    Rel(af, sis, "Administra la flota", "HTTPS")
+    Rel(de, sis, "Asigna recursos y monitorea operaciones", "HTTPS")
+    Rel(co, sis, "Confirma entregas desde el móvil", "HTTPS")
+    Rel(ge, sis, "Visualiza dashboard de KPIs", "HTTPS")
+    Rel(dest, sis, "Consulta seguimiento público", "HTTPS")

@@ -1,0 +1,41 @@
+C4Deployment
+    title Nivel 4 - Despliegue propuesto (Docker Compose, demostración al Directorio)
+
+    Deployment_Node(cli, "Dispositivo del usuario", "PC / móvil") {
+        Deployment_Node(br, "Navegador web", "Chrome / Firefox") {
+            Container(spa, "SPA", "Angular", "Interfaz de usuario")
+        }
+    }
+
+    Deployment_Node(host, "Servidor / host de demostración", "Docker Engine + Docker Compose") {
+        Deployment_Node(web, "Contenedor web", "Nginx") {
+            Container(nginx, "Servidor estático", "Nginx", "Sirve los archivos de la SPA")
+        }
+        Deployment_Node(cgw, "Contenedor gateway", "Node.js") {
+            Container(gw, "API Gateway / BFF", "Express", "Entrada única y JWT")
+        }
+        Deployment_Node(cms, "Contenedores de microservicios", "Node.js x4") {
+            Container(msenv, "MS-Envíos", "Express", "Puerto 3001")
+            Container(msflo, "MS-Flota", "Express", "Puerto 3002")
+            Container(mscon, "MS-Conductores", "Express", "Puerto 3003")
+            Container(msent, "MS-Entregas", "Express", "Puerto 3004")
+        }
+        Deployment_Node(cdb, "Contenedor de base de datos", "PostgreSQL") {
+            ContainerDb(pg, "PostgreSQL", "Esquemas envios, flota, conductores, entregas", "Un esquema por microservicio")
+        }
+        Deployment_Node(vol, "Volumen Docker", "Almacenamiento persistente") {
+            Container(files, "Archivos", "Evidencias y comprobantes", "Fotos y PDFs")
+        }
+    }
+
+    Rel(spa, nginx, "Descarga la aplicación", "HTTPS")
+    Rel(spa, gw, "Consume API", "JSON/HTTPS")
+    Rel(gw, msenv, "REST")
+    Rel(gw, msflo, "REST")
+    Rel(gw, mscon, "REST")
+    Rel(gw, msent, "REST")
+    Rel(msenv, pg, "SQL")
+    Rel(msflo, pg, "SQL")
+    Rel(mscon, pg, "SQL")
+    Rel(msent, pg, "SQL")
+    Rel(msent, files, "I/O")
