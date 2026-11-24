@@ -1,0 +1,9 @@
+{
+  "name": "1er-hackathon",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kata de arquitectura de microservicios - 1er Hackathon",
+  "scripts": {
+    "smoke": "node scripts/smoke/run.js"
+  }
+}
