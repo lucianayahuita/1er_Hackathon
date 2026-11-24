@@ -1,5 +1,5 @@
-// Módulo 3
-// TODO mañana: renombrar el modelo "Registro" a la entidad real del kata.
+// Módulo 3 · PAGOS DE SERVICIOS (Banca por Internet – Startup Chuno)
+// Proveedor y Deuda simulan al sistema externo de las empresas de servicios.
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,15 +9,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Registro {
+model Proveedor {
+  id        Int      @id @default(autoincrement())
+  codigo    String   @unique
+  nombre    String
+  categoria String // LUZ | AGUA | TELEFONO | GAS | OTROS
+  activo    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  deudas    Deuda[]
+}
+
+model Deuda {
+  id            Int       @id @default(autoincrement())
+  proveedorId   Int
+  proveedor     Proveedor @relation(fields: [proveedorId], references: [id])
+  codigoCliente String
+  periodo       String
+  monto         Decimal   @db.Decimal(12, 2)
+  pagada        Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  pagos         Pago[]
+
+  @@unique([proveedorId, codigoCliente, periodo])
+  @@index([codigoCliente])
+}
+
+model Pago {
   id          Int      @id @default(autoincrement())
-  codigo      String   @unique
-  nombre      String
-  descripcion String?
-  categoria   String   @default("General")
-  monto       Decimal  @default(0) @db.Decimal(12, 2)
+  clienteId   Int
+  cuentaId    Int
+  deudaId     Int
+  deuda       Deuda    @relation(fields: [deudaId], references: [id])
+  monto       Decimal  @db.Decimal(12, 2)
+  comprobante String   @unique
+  estado      String // COMPLETADO | RECHAZADO
+  motivo      String?
   fecha       DateTime @default(now())
-  activo      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+
+  @@index([clienteId])
 }
