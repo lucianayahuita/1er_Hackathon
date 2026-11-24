@@ -5,7 +5,7 @@
 **Contrato:** [`contracts/modulo3.md`](../../contracts/modulo3.md)
 
 ## Qué es este servicio
-Módulo 3 (suele ser documento parametrizable o lógica que consulta a ms-modulo1 vía `src/integracion/modulo1.client.ts`).
+Pagos de servicios básicos (luz, agua, teléfono, gas, otros) contra proveedores externos simulados; valida y debita la cuenta en `ms-modulo2` vía HTTP.
 
 ## Estructura
 ```
@@ -15,7 +15,7 @@ src/main.ts                 ← bootstrap, Swagger (/docs), ValidationPipe, CORS
 src/health.controller.ts    ← GET /health
 src/registros/              ← módulo CRUD (controller, service, dto) – base a adaptar
 src/integracion/            ← cliente HTTP a ms-modulo1 (si existe en este servicio)
-.env.example                ← PORT, DATABASE_URL, MS_MODULO1_URL
+.env.example                ← PORT, DATABASE_URL, MS_MODULO1_URL, MS_MODULO2_URL
 ```
 
 ## Comandos

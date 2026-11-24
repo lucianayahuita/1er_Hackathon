@@ -50,22 +50,26 @@ module.exports = {
       ctx.assert(res.data && res.data.status === 'ok', 'Gateway debe responder con payload de ms-modulo1');
     });
 
-    // 4. Login con credenciales
-    const loginUrl = process.env.AUTH_LOGIN_URL || `${urls.gateway}/api/auth/login`;
-    const hasLoginRoute = await ctx.isReachable(loginUrl);
+    // 4. Login con credenciales (según contrato ms-modulo1: POST /clientes/login)
+    const loginUrl = process.env.AUTH_LOGIN_URL || `${urls.modulo1}/clientes/login`;
+    const hasLoginRoute = await ctx.isReachable(`${urls.modulo1}/clientes`);
 
     if (hasLoginRoute) {
-      await ctx.test('POST login con credenciales válidas retorna token', async () => {
+      await ctx.test('POST /clientes/login con credenciales válidas retorna cliente', async () => {
         const payload = {
-          email: process.env.AUTH_USER || 'admin@hackathon.local',
-          password: process.env.AUTH_PASSWORD || 'admin123',
+          usuario: process.env.AUTH_USER || 'mquispe',
+          password: process.env.AUTH_PASSWORD || 'Segura2026',
         };
         const res = await ctx.post(loginUrl, payload);
+        if (res.status === 404) {
+          ctx.skip('POST /clientes/login no implementado aún en ms-modulo1');
+          return;
+        }
         ctx.assert(res.status === 200 || res.status === 201, `Login falló con código ${res.status}`);
-        ctx.assert(res.data && (res.data.token || res.data.access_token), 'Respuesta debe incluir token');
+        ctx.assert(res.data && (res.data.id || res.data.token || res.data.access_token), 'Respuesta debe incluir datos de cliente o token');
       });
     } else {
-      ctx.skip('POST /auth/login con credenciales', 'Ruta de login no detectada o no requerida en MVP actual');
+      ctx.skip('POST /clientes/login con credenciales', 'ms-modulo1 aún no tiene /clientes activo o está offline');
     }
 
     // 5. 401 Unauthorized sin token

@@ -5,7 +5,7 @@
 **Contrato:** [`contracts/modulo4.md`](../../contracts/modulo4.md)
 
 ## Qué es este servicio
-Módulo que **genera y almacena** algo (pagos, reportes, documentos…) usando datos de ms-modulo1 vía `src/integracion/modulo1.client.ts`.
+Transferencias entre cuentas propias, a terceros del mismo banco y a otros bancos (intermediario ACH simulado), debitando y acreditando en `ms-modulo2` vía HTTP.
 
 ## Estructura
 ```
@@ -15,7 +15,7 @@ src/main.ts                 ← bootstrap, Swagger (/docs), ValidationPipe, CORS
 src/health.controller.ts    ← GET /health
 src/registros/              ← módulo CRUD (controller, service, dto) – base a adaptar
 src/integracion/            ← cliente HTTP a ms-modulo1 (si existe en este servicio)
-.env.example                ← PORT, DATABASE_URL, MS_MODULO1_URL
+.env.example                ← PORT, DATABASE_URL, MS_MODULO1_URL, MS_MODULO2_URL
 ```
 
 ## Comandos

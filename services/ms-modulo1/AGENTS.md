@@ -48,7 +48,7 @@ npx prisma studio     # ver/editar datos
 | 0:10–0:25 | Contratos `modulo1.md` y `modulo4.md` |
 | 0:25–0:35 | Adaptar esqueleto: renombrar modelo, `db:setup` |
 | 0:35–0:55 | CRUD completo + baja lógica + `/stats` → **PR 0:55** |
-| 0:55–1:30 | Pasar a `ms-modulo4` |
+| 0:55–1:30 | Pasar a `ms-modulo5` (Préstamos) |
 
 > **Kata de hoy:** Banca por Internet – STARTUP CHUNO (24/11/2026). Ver `AGENTS.md` raíz y `contracts/`.
 

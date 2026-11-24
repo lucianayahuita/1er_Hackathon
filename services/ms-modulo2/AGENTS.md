@@ -54,7 +54,7 @@ npx prisma studio     # ver/editar datos
 ## Mis tareas – Laura · CUENTAS DE AHORRO (contrato: `contracts/modulo2.md`)
 - [ ] `prisma/schema.prisma`: `Cuenta` (numero único, clienteId, moneda BOB/USD, saldo Decimal(14,2), activo) y `Movimiento` (cuentaId, tipo DEPOSITO/RETIRO, monto, saldoResultante, descripcion, fecha).
 - [ ] Renombrar `src/registros` → `src/cuentas` (`@Controller('cuentas')`).
-- [ ] POST /cuentas: validar cliente activo con `Modulo1Client` (adaptar ruta a `/clientes/:id`); generar `numero` = `"1" + id.padStart(9,"0")` tras crear.
+- [ ] POST /cuentas: validar cliente activo con `Modulo1Client` (adaptar ruta a `/clientes/:id`); generar `numero` = `String(1000000000 + id)` tras crear (ej. `1000000001`).
 - [ ] GET /cuentas?clienteId=, GET :id, GET /cuentas/numero/:numero, PATCH :id, PATCH :id/baja (solo saldo 0).
 - [ ] POST :id/depositar y :id/extraer con `prisma.$transaction` (actualiza saldo + crea Movimiento); errores 400: monto ≤ 0, saldo insuficiente, cuenta inactiva.
 - [ ] GET :id/movimientos (desc) y GET /cuentas/stats `{ totalCuentas, activas, saldoTotal }`.
