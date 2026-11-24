@@ -66,10 +66,18 @@ npm run build                              # verificar que compila
 9. Código y textos de UI en **español**; seguir el estilo existente (shadcn, Tailwind, componentes de `components/shared`).
 10. Cambios **pequeños y rápidos**: es una hackathon de 2 horas.
 
-## Dominio del kata (Startup Chuno – Banca por Internet)
-| # | Módulo (nombre real) | Servicio | Entidad | Regla de negocio |
-|---|---|---|---|---|
-| 1 | Clientes y Seguridad | ms-modulo1 (Jean) | Cliente | Doc/email únicos, mayor 18 años, baja lógica (`INACTIVO`), credencial inicial con hash |
-| 2 | Cuentas (Ahorro) | ms-modulo2 (Laura) | Cuenta | Saldo no negativo, apertura valida cliente en ms-modulo1, cierre solo con saldo 0 |
-| 3 | Pagos de Servicios | ms-modulo3 (Elias) | Pago | Debita en ms-modulo2, compensación si falla proveedor, comprobante e idempotencia |
-| 4 | Transferencias | ms-modulo4 (Jean/Laura) | Transferencia | Límites diarios/operación, transferencias internas (saga débito/crédito) y ACH |
+## Dominio del kata: BANCA POR INTERNET – STARTUP CHUNO (24/11/2026)
+Startup boliviana que crea una banca por internet para multibancos. Requisitos clave: microservicios modulares, **gestión descentralizada de datos**,
+despliegue independiente, servicios débilmente acoplados que se comunican por **APIs bien definidas**, BD relacional.
+Entrega: 18:30–20:45 (los últimos 15 min son para subir al LMS el informe con HU, código, pantallas y evidencias; carátula con asistentes y fecha).
+
+| # | Módulo | Servicio | Entidades | Regla de negocio principal | Back | Front | Logro |
+|---|---|---|---|---|---|---|---|
+| 1 | Clientes | ms-modulo1 :3001 | Cliente | CRUD + baja lógica + **seguridad**: password hasheada, login, bloqueo a los 3 intentos | Jean | Luciana | 75% (con 2) |
+| 2 | Cuentas de ahorro | ms-modulo2 :3002 | Cuenta, Movimiento | Depositar/extraer; saldo insuficiente; cliente debe existir (HTTP a m1) | Laura | Luciana | 75% (con 1) |
+| 3 | Pagos de servicios | ms-modulo3 :3003 | Proveedor, Deuda, Pago | Paga deuda de proveedor externo (simulado) debitando la cuenta (HTTP a m2) | Elias | Axl | 100% (con 4) |
+| 4 | Transferencias | ms-modulo4 :3004 | Transferencia, Banco | Propia / tercero / interbancaria (intermediario simulado, límite Bs 50.000) debitando y acreditando (HTTP a m2) | Laura / Jean | Axl | 100% (con 3) |
+| 5 | Préstamos (bonus) | ms-modulo5 :3005 | Prestamo | Cuota sistema francés; al aprobar deposita en la cuenta | Jean | Luciana / Axl | +30% |
+
+**Dependencias entre servicios:** Cuentas → Clientes · Pagos → Cuentas · Transferencias → Cuentas · Préstamos → Clientes y Cuentas.
+Contratos detallados en `contracts/modulo1..5.md` (fuente de verdad de rutas, campos y mensajes de error).

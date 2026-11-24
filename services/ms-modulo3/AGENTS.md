@@ -1,6 +1,6 @@
 # AGENTS.md – ms-modulo3
 
-**Dueño:** Elias · **Rol:** Dev Backend + Informe técnico
+**Módulo:** PAGOS DE SERVICIOS · **Dueño:** Elias · **Rol:** Dev Backend + Informe técnico
 **Puerto:** `3003` · **BD:** `db_modulo3` (Postgres en Docker, host `5433`) · **Gateway del front:** `/api/m3`
 **Contrato:** [`contracts/modulo3.md`](../../contracts/modulo3.md)
 
@@ -49,10 +49,14 @@ npx prisma studio     # ver/editar datos
 | 0:35–1:10 | Endpoints + lógica → **PR 1:10** |
 | 1:15–2:00 | Fixes + informe técnico (arquitectura, endpoints, capturas Swagger) |
 
-## Mis tareas (completar el día de la hackathon)
-<!-- Elias: escribe aquí tus tareas concretas una vez leído el kata. El asistente debe trabajar sobre esta lista. -->
-- [ ] Entidad:
-- [ ] Campos:
-- [ ] Endpoints:
-- [ ] Regla de negocio:
-- [ ]
+> **Kata de hoy:** Banca por Internet – STARTUP CHUNO (24/11/2026). Ver `AGENTS.md` raíz y `contracts/`.
+
+## Mis tareas – Elias · PAGOS DE SERVICIOS (contrato: `contracts/modulo3.md`)
+- [ ] `prisma/schema.prisma`: `Proveedor`, `Deuda` (simula el sistema externo), `Pago` (clienteId, cuentaId, deudaId, monto, comprobante único, estado, fecha).
+- [ ] Seed: proveedores DELAPAZ (LUZ), EPSAS (AGUA), ENTEL (TELEFONO), YPFB (GAS), TIGO (OTROS) y ~15 deudas pendientes con códigos `MED-10001`… y periodos `2026-09/10/11`.
+- [ ] `src/integracion/modulo2.client.ts` (copiar `modulo1.client.ts`, usar `MS_MODULO2_URL`) con `obtenerCuenta(id)` y `extraer(id, monto, descripcion)`; agregar `MS_MODULO2_URL=http://localhost:3002` a `.env` y `.env.example`.
+- [ ] Endpoints: GET /proveedores, GET /proveedores/:id/deudas?codigoCliente=, POST /pagos, GET /pagos?clienteId=, GET /pagos/:id, GET /pagos/stats.
+- [ ] POST /pagos: deuda pendiente → cuenta del cliente → `extraer` en Cuentas → si falla guarda RECHAZADO y 400 con el mensaje → si ok marca deuda pagada y guarda COMPLETADO con comprobante `PAG-AAAAMMDD-0001`.
+- [ ] Mientras Cuentas no esté listo: probar con un mock (devolver saldo suficiente) y cambiar al real a las 1:05.
+- [ ] **PR a las 1:10** (19:40).
+- [ ] **Informe (1:15 en adelante):** sección de Arquitectura (microservicios, BD por servicio, API Gateway, integración con servicios externos simulados) + tabla de endpoints y reglas de los 4 servicios + capturas de Swagger.

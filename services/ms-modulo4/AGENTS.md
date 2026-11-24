@@ -1,6 +1,6 @@
 # AGENTS.md – ms-modulo4
 
-**Dueño:** Jean (dueño) · Laura (apoyo) · **Rol:** Dev Backend
+**Módulo:** TRANSFERENCIAS · **Dueña:** Laura · **Rol:** Dev Backend
 **Puerto:** `3004` · **BD:** `db_modulo4` (Postgres en Docker, host `5433`) · **Gateway del front:** `/api/m4`
 **Contrato:** [`contracts/modulo4.md`](../../contracts/modulo4.md)
 
@@ -28,7 +28,7 @@ npx prisma studio     # ver/editar datos
 ```
 
 ## Notas específicas
-- **Dos personas en este servicio:** Jean es dueño de `prisma/schema.prisma` y del controller; Laura solo agrega **archivos nuevos** (ej. `src/calculo/*.service.ts`). No editen el mismo archivo.
+- Laura lo empieza después de Cuentas (≈19:35): ya conoce los endpoints `extraer`, `depositar` y `numero/:numero` que usa este servicio.
 
 ## Reglas para el asistente de IA
 - Lee también el [`AGENTS.md` raíz](../../AGENTS.md) (arquitectura y reglas generales).
@@ -44,13 +44,15 @@ npx prisma studio     # ver/editar datos
 ## Hitos del plan
 | Minuto | Qué |
 |---|---|
-| 0:55–1:30 | Generar + almacenar + histórico → **PR 1:30** |
+| 1:05–1:30 | Transferencias propias/terceros/interbancarias → **PR 1:30** |
 | 1:30–1:45 | Fixes de integración |
 
-## Mis tareas (completar el día de la hackathon)
-<!-- Jean: escribe aquí tus tareas concretas una vez leído el kata. El asistente debe trabajar sobre esta lista. -->
-- [ ] Entidad:
-- [ ] Campos:
-- [ ] Endpoints:
-- [ ] Regla de negocio:
-- [ ]
+> **Kata de hoy:** Banca por Internet – STARTUP CHUNO (24/11/2026). Ver `AGENTS.md` raíz y `contracts/`.
+
+## Mis tareas – Laura · TRANSFERENCIAS (contrato: `contracts/modulo4.md`)
+- [ ] `prisma/schema.prisma`: `Transferencia` (tipo PROPIA/TERCERO/INTERBANCARIA, clienteId, cuentaOrigenId, cuentaDestinoNumero, bancoDestino, titularDestino, monto, glosa, estado, codigoAch, fecha) y `Banco` (catálogo).
+- [ ] Seed de bancos: BNB, BCP, Banco Unión, Mercantil Santa Cruz, BISA; 5 transferencias de ejemplo.
+- [ ] `src/integracion/modulo2.client.ts`: `obtenerCuenta(id)`, `obtenerPorNumero(numero)`, `extraer(...)`, `depositar(...)`; agregar `MS_MODULO2_URL=http://localhost:3002` a `.env` y `.env.example`.
+- [ ] `@Controller('transferencias')`: POST, GET ?clienteId=, GET :id, GET /transferencias/stats, GET /bancos.
+- [ ] POST /transferencias: validaciones por tipo (propia = mismo cliente, tercero = otro cliente, interbancaria = banco válido + titular + límite Bs 50.000 + `codigoAch`) → extraer origen → depositar destino (no en interbancaria) → COMPLETADA; si falla RECHAZADA + 400.
+- [ ] **PR a las 1:30** (20:00).

@@ -1,6 +1,6 @@
 # AGENTS.md – ms-modulo1
 
-**Dueño:** Jean · **Rol:** Dev Backend
+**Módulo:** CLIENTES · **Dueño:** Jean · **Rol:** Dev Backend
 **Puerto:** `3001` · **BD:** `db_modulo1` (Postgres en Docker, host `5433`) · **Gateway del front:** `/api/m1`
 **Contrato:** [`contracts/modulo1.md`](../../contracts/modulo1.md)
 
@@ -50,10 +50,14 @@ npx prisma studio     # ver/editar datos
 | 0:35–0:55 | CRUD completo + baja lógica + `/stats` → **PR 0:55** |
 | 0:55–1:30 | Pasar a `ms-modulo4` |
 
-## Mis tareas (completar el día de la hackathon)
-<!-- Jean: escribe aquí tus tareas concretas una vez leído el kata. El asistente debe trabajar sobre esta lista. -->
-- [ ] Entidad:
-- [ ] Campos:
-- [ ] Endpoints:
-- [ ] Regla de negocio:
-- [ ]
+> **Kata de hoy:** Banca por Internet – STARTUP CHUNO (24/11/2026). Ver `AGENTS.md` raíz y `contracts/`.
+
+## Mis tareas – Jean · CLIENTES (contrato: `contracts/modulo1.md`)
+- [ ] `prisma/schema.prisma`: renombrar `Registro` → `Cliente` con campos del contrato (ci, nombres, apellidos, email, telefono, direccion, usuario, passwordHash, intentosFallidos, bloqueado, activo). `@unique` en ci, email, usuario.
+- [ ] Renombrar módulo `src/registros` → `src/clientes` (controller `@Controller('clientes')`, service, DTOs). `CreateClienteDto` con `password` (`@MinLength(8)`), `@IsEmail()`.
+- [ ] Hash de password con `crypto.scryptSync(password, salt, 64)` (guardar `salt:hash`); **nunca** devolver `passwordHash` (usar `select` u omitirlo).
+- [ ] CRUD: GET (filtro `q` por ci/nombres/apellidos), GET :id, POST (409 si ci/email/usuario repetido), PATCH, PATCH :id/baja.
+- [ ] Seguridad: `POST /clientes/login` (401 + intentosFallidos++, bloqueo a los 3 → 403) y `PATCH /clientes/:id/desbloquear`.
+- [ ] `GET /clientes/stats` → `{ total, activos, inactivos, bloqueados }`.
+- [ ] `prisma/seed.ts`: 8 clientes bolivianos realistas (password `Segura2026` hasheada), 1 inactivo, 1 bloqueado.
+- [ ] **PR a las 0:55** (19:25). Luego pasar a `ms-modulo5` (**Préstamos**, ver `services/ms-modulo5/AGENTS.md`).

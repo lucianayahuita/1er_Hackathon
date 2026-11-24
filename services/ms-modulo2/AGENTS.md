@@ -1,6 +1,6 @@
 # AGENTS.md – ms-modulo2
 
-**Dueño:** Laura · **Rol:** Dev Backend
+**Módulo:** CUENTAS · **Dueña:** Laura · **Rol:** Dev Backend
 **Puerto:** `3002` · **BD:** `db_modulo2` (Postgres en Docker, host `5433`) · **Gateway del front:** `/api/m2`
 **Contrato:** [`contracts/modulo2.md`](../../contracts/modulo2.md)
 
@@ -49,10 +49,15 @@ npx prisma studio     # ver/editar datos
 | 0:35–1:05 | Endpoints + regla de negocio → **PR 1:05** |
 | 1:05–1:30 | Apoyo a `ms-modulo4` (solo archivos nuevos) |
 
-## Mis tareas (completar el día de la hackathon)
-<!-- Laura: escribe aquí tus tareas concretas una vez leído el kata. El asistente debe trabajar sobre esta lista. -->
-- [ ] Entidad:
-- [ ] Campos:
-- [ ] Endpoints:
-- [ ] Regla de negocio:
-- [ ]
+> **Kata de hoy:** Banca por Internet – STARTUP CHUNO (24/11/2026). Ver `AGENTS.md` raíz y `contracts/`.
+
+## Mis tareas – Laura · CUENTAS DE AHORRO (contrato: `contracts/modulo2.md`)
+- [ ] `prisma/schema.prisma`: `Cuenta` (numero único, clienteId, moneda BOB/USD, saldo Decimal(14,2), activo) y `Movimiento` (cuentaId, tipo DEPOSITO/RETIRO, monto, saldoResultante, descripcion, fecha).
+- [ ] Renombrar `src/registros` → `src/cuentas` (`@Controller('cuentas')`).
+- [ ] POST /cuentas: validar cliente activo con `Modulo1Client` (adaptar ruta a `/clientes/:id`); generar `numero` = `"1" + id.padStart(9,"0")` tras crear.
+- [ ] GET /cuentas?clienteId=, GET :id, GET /cuentas/numero/:numero, PATCH :id, PATCH :id/baja (solo saldo 0).
+- [ ] POST :id/depositar y :id/extraer con `prisma.$transaction` (actualiza saldo + crea Movimiento); errores 400: monto ≤ 0, saldo insuficiente, cuenta inactiva.
+- [ ] GET :id/movimientos (desc) y GET /cuentas/stats `{ totalCuentas, activas, saldoTotal }`.
+- [ ] Seed: 10 cuentas para clientes 1..8 con saldos variados y algunos movimientos.
+- [ ] **PR a las 1:05** (19:35). **Importante:** Pagos, Transferencias y Préstamos dependen de `extraer`/`depositar`/`numero/:numero`: avisa a Elias y Jean apenas funcionen.
+- [ ] Luego (19:35): pasar a `ms-modulo4` **Transferencias** (ver `services/ms-modulo4/AGENTS.md`).
