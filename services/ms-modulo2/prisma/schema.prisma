@@ -1,0 +1,23 @@
+// Módulo 2
+// TODO mañana: renombrar el modelo "Registro" a la entidad real del kata.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Registro {
+  id          Int      @id @default(autoincrement())
+  codigo      String   @unique
+  nombre      String
+  descripcion String?
+  categoria   String   @default("General")
+  monto       Decimal  @default(0) @db.Decimal(12, 2)
+  fecha       DateTime @default(now())
+  activo      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

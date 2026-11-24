@@ -1,0 +1,67 @@
+# Dueño: Axl (Arquitecto). Uso normal en la hackathon: `docker compose up -d` (solo BD + Adminer).
+# Demo completa containerizada: `docker compose --profile full up --build`
+x-nest: &nest
+  profiles: ["full"]
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: kata-db
+    environment:
+      POSTGRES_USER: kata
+      POSTGRES_PASSWORD: kata
+    ports: ["5433:5432"]   # 5433 en el host para no chocar con un Postgres local
+    volumes:
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kata"]
+      interval: 3s
+      retries: 10
+
+  adminer:
+    image: adminer
+    container_name: kata-adminer
+    ports: ["8080:8080"]
+    depends_on: [postgres]
+
+  ms-modulo1:
+    <<: *nest
+    build: { context: ./services/ms-modulo1, dockerfile: ../../docker/Dockerfile.nest }
+    environment:
+      PORT: 3001
+      DATABASE_URL: postgresql://kata:kata@postgres:5432/db_modulo1
+    ports: ["3001:3001"]
+
+  ms-modulo2:
+    <<: *nest
+    build: { context: ./services/ms-modulo2, dockerfile: ../../docker/Dockerfile.nest }
+    environment:
+      PORT: 3002
+      DATABASE_URL: postgresql://kata:kata@postgres:5432/db_modulo2
+      MS_MODULO1_URL: http://ms-modulo1:3001
+    ports: ["3002:3002"]
+
+  ms-modulo3:
+    <<: *nest
+    build: { context: ./services/ms-modulo3, dockerfile: ../../docker/Dockerfile.nest }
+    environment:
+      PORT: 3003
+      DATABASE_URL: postgresql://kata:kata@postgres:5432/db_modulo3
+      MS_MODULO1_URL: http://ms-modulo1:3001
+    ports: ["3003:3003"]
+
+  ms-modulo4:
+    <<: *nest
+    build: { context: ./services/ms-modulo4, dockerfile: ../../docker/Dockerfile.nest }
+    environment:
+      PORT: 3004
+      DATABASE_URL: postgresql://kata:kata@postgres:5432/db_modulo4
+      MS_MODULO1_URL: http://ms-modulo1:3001
+    ports: ["3004:3004"]
+
+volumes:
+  pgdata:
