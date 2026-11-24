@@ -9,8 +9,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
   const config = new DocumentBuilder()
-    .setTitle('ms-modulo2')
-    .setDescription('Módulo 2')
+    .setTitle('Startup Chuno - Cuentas de ahorro')
+    .setDescription('Módulo 2: administración de cuentas, depósitos, retiros y movimientos')
     .setVersion('0.1.0')
     .build();
   SwaggerModule.setup('docs', app, SwaggerModule.createDocument(app, config));
