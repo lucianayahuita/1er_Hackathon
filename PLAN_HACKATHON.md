@@ -7,6 +7,42 @@
 
 ---
 
+## 0. KATA DE HOY – Banca por Internet · STARTUP CHUNO (24/11/2026, 18:30–20:45)
+
+**Enunciado resumido:** banca por internet con microservicios (modulares, datos descentralizados, despliegue independiente, débilmente acoplados, APIs bien definidas) y BD relacional.
+**Entrega al LMS (20:30–20:45):** informe en el formato del curso con **carátula (asistentes + fecha)**, **HU**, código, pantallas y evidencias.
+**Logro:** Clientes + Cuentas = **75%** · + Pagos + Transferencias = **100%** · Préstamos = **+30% adicional**.
+
+### Reparto de tareas
+| # | Módulo | Servicio | Back | Front | Depende de | Contrato |
+|---|---|---|---|---|---|---|
+| 1 | Clientes (alta/modif./baja + seguridad) | ms-modulo1 :3001 | **Jean** | **Luciana** | — | `contracts/modulo1.md` |
+| 2 | Cuentas de ahorro (depositar/extraer) | ms-modulo2 :3002 | **Laura** | **Luciana** | Clientes | `contracts/modulo2.md` |
+| 3 | Pagos de servicios (luz, agua, teléfono, gas) | ms-modulo3 :3003 | **Elias** | **Axl** | Cuentas | `contracts/modulo3.md` |
+| 4 | Transferencias (propias/terceros/otros bancos) | ms-modulo4 :3004 | **Laura** | **Axl** | Cuentas | `contracts/modulo4.md` |
+| 5 | Préstamos – **bonus +30%** | ms-modulo5 :3005 | **Jean** | **Luciana** (tras Dashboard) / Axl | Clientes, Cuentas | `contracts/modulo5.md` |
+
+- **Servicios externos** (proveedores de luz/agua… y el intermediario interbancario) se **simulan** dentro de ms-modulo3 y ms-modulo4 con tablas propias (`Deuda`, `Banco`) y se documentan como integraciones externas.
+- **Cuentas es el cuello de botella:** Pagos y Transferencias debitan/acreditan llamando a `POST /cuentas/:id/extraer` y `/depositar`. Laura avisa apenas funcionen; Elias mockea mientras tanto. Laura hace Transferencias después de Cuentas, así que ya conoce esos endpoints.
+- **Informe:** Luciana (carátula, inicio, HU de los 5 módulos, planificación, capturas de pantallas, conclusiones, PDF y carga al LMS) · Elias (arquitectura, endpoints y reglas, capturas de Swagger).
+- Tareas detalladas de cada uno: `services/ms-moduloX/AGENTS.md` y `apps/web/AGENTS.md`.
+
+### Horario real
+| Hora | Minuto | Qué |
+|---|---|---|
+| 18:30–18:45 | 0:00–0:15 | Lectura y alcance (ya resuelto: contratos y tareas listos en el repo) → todos `git pull` |
+| 18:40–18:55 | 0:10–0:25 | Revisar contratos (5 min cada dueño) + Luciana redacta HU |
+| 18:55–19:05 | 0:25–0:35 | Adoptar esqueleto: Axl renombra `lib/modules.ts`; backs renombran modelos y `db:setup` |
+| 19:05–19:15 | 0:35–0:45 | Back implementa / front con datos simulados del contrato |
+| 19:15–19:45 | 0:45–1:15 | Conexión front ↔ endpoints · PR Clientes 19:25 · PR Cuentas 19:35 · PR Pagos 19:40 · **75% a las 19:40** |
+| 19:25–20:05 | 0:55–1:35 | Jean: Préstamos (PR 20:00) en paralelo desde que mergea Clientes |
+| 19:45–20:05 | 1:15–1:35 | Laura: Transferencias (PR 20:00) · pantallas Pagos/Transferencias/Préstamos · Dashboard |
+| 20:05–20:15 | 1:35–1:45 | Integración final · **CODE FREEZE 20:15** |
+| 20:15–20:30 | 1:45–2:00 | Capturas, demo, cierre del informe |
+| 20:30–20:45 | — | **Exportar PDF y subir al LMS** (Luciana) |
+
+---
+
 ## 1. Patrón de los katas
 
 | Elemento del enunciado | Qué hacemos |
@@ -77,7 +113,8 @@
 │   ├── ms-modulo1/             ← Jean
 │   ├── ms-modulo2/             ← Laura
 │   ├── ms-modulo3/             ← Elias
-│   └── ms-modulo4/             ← Jean (Laura apoya)
+│   ├── ms-modulo4/             ← Laura
+│   └── ms-modulo5/             ← Jean (bonus Préstamos)
 ├── contracts/modulo1..4.md     ← contratos de API (se congelan al minuto 25)
 ├── docker-compose.yml, docker/ ← Axl
 └── README.md                   ← cómo levantar todo

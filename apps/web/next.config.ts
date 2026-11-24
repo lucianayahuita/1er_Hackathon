@@ -9,6 +9,7 @@ const services: Record<string, string> = {
   m2: process.env.MS_MODULO2_URL ?? "http://localhost:3002",
   m3: process.env.MS_MODULO3_URL ?? "http://localhost:3003",
   m4: process.env.MS_MODULO4_URL ?? "http://localhost:3004",
+  m5: process.env.MS_MODULO5_URL ?? "http://localhost:3005",
 };
 
 const nextConfig: NextConfig = {

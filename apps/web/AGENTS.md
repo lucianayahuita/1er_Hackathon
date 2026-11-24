@@ -43,16 +43,19 @@ npm run dev      # http://localhost:3000
 npm run build    # verificar compilación
 ```
 
-## Tareas de Luciana (completar el día de la hackathon)
-<!-- Luciana: tareas concretas de módulo 1, módulo 2 y Dashboard. -->
-- [ ] Módulo 1:
-- [ ] Módulo 2:
-- [ ] Dashboard:
-- [ ]
+> **Kata de hoy:** Banca por Internet – STARTUP CHUNO (24/11/2026). Ver `AGENTS.md` raíz y `contracts/`.
 
-## Tareas de Axl (completar el día de la hackathon)
-<!-- Axl: renombrado de dominio, módulo 3, módulo 4, integración. -->
-- [ ] Renombrar `lib/modules.ts`:
-- [ ] Módulo 3:
-- [ ] Módulo 4:
-- [ ]
+## Tareas de Luciana · Clientes, Cuentas, Dashboard + informe (gestión)
+- [ ] **Clientes (`app/modulo1`):** tabla (CI, nombre completo, email, teléfono, usuario, estado: Activo/Inactivo/Bloqueado), búsqueda, formulario alta/edición (password solo en alta), baja con confirmación, botón "Desbloquear" si `bloqueado`. Endpoints `/api/m1/clientes...`. Crear componentes propios en `app/modulo1/` (no modificar `components/shared`).
+- [ ] **Cuentas (`app/modulo2`):** tabla (número, cliente, moneda, saldo con `formatMoney`, estado), crear cuenta (select de clientes desde `/api/m1/clientes?activo=true`), diálogos **Depositar** y **Extraer** (mostrar error "Saldo insuficiente" con toast), vista de movimientos (Sheet o Tabs).
+- [ ] **Dashboard (`app/page.tsx`):** KPIs: clientes activos (`/api/m1/clientes/stats`), cuentas y saldo total (`/api/m2/cuentas/stats`), pagos (`/api/m3/pagos/stats`), transferencias (`/api/m4/transferencias/stats`); gráfico de pagos por categoría; tolerar servicios caídos (mostrar "—").
+- [ ] Ajustar tipos en `lib/api.ts` (`Cliente`, `Cuenta`, `Movimiento`) — coordinar con Axl porque es compartido.
+- [ ] **Préstamos (`app/modulo5`, bonus, después del Dashboard):** tabla de préstamos con estado, formulario de solicitud (cliente, cuenta, monto, tasa, plazo) mostrando la cuota calculada, botones Aprobar/Rechazar. Endpoints `/api/m5/prestamos...`. Si no llegas, lo toma Axl.
+- [ ] **Informe:** carátula (integrantes asistentes + fecha 24/11/2026), Fase de Inicio, **historias de usuario** de los 5 módulos, planificación, capturas de pantallas, conclusiones, PDF y **carga al LMS antes de las 20:45**.
+
+## Tareas de Axl · Renombrado, Pagos, Transferencias, integración
+- [ ] **`lib/modules.ts`:** `APP_NAME = "Chuno Banca"`, subtítulo "Banca por Internet"; módulos: Clientes (`Users`), Cuentas (`Wallet`/`PiggyBank`), Pagos de servicios (`Receipt`), Transferencias (`ArrowLeftRight`); entidades Cliente, Cuenta, Pago, Transferencia.
+- [ ] **Pagos (`app/modulo3`):** reemplazar el ejemplo de documento por: selector de proveedor (tarjetas con icono por categoría) → buscar deudas por código → elegir cliente y cuenta → pagar → **comprobante imprimible** (`PrintableDocument`) + historial.
+- [ ] **Transferencias (`app/modulo4`):** Tabs Propia / Tercero / Otro banco; formulario (cuenta origen del cliente, destino, banco y titular en interbancaria, monto, glosa) → comprobante imprimible + historial con badge de estado.
+- [ ] Mergear en orden (m1 → m2 → m3 → m4), probar de punta a punta, **code freeze 20:15**, ensayo de demo.
+- [ ] Renombrar el módulo 5 en `lib/modules.ts`: Préstamos (`Landmark`), entidad Préstamo (gateway `/api/m5` y página `/modulo5` ya existen).

@@ -57,5 +57,14 @@ services:
       MS_MODULO1_URL: http://ms-modulo1:3001
     ports: ["3004:3004"]
 
+  ms-modulo5:
+    <<: *nest
+    build: { context: ./services/ms-modulo5, dockerfile: ../../docker/Dockerfile.nest }
+    environment:
+      PORT: 3005
+      DATABASE_URL: postgresql://kata:kata@postgres:5432/db_modulo5
+      MS_MODULO1_URL: http://ms-modulo1:3001
+    ports: ["3005:3005"]
+
 volumes:
   pgdata:
