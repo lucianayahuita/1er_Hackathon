@@ -25,7 +25,7 @@ ms-modulo1 :3001  ms-modulo2 :3002  ms-modulo3 :3003  ms-modulo4 :3004
 | `services/ms-modulo3` | Elias | 3003 |
 | `services/ms-modulo4` | Laura (Jean apoya) | 3004 |
 | `services/ms-template` | referencia (no tocar) | 3009 |
-| `docker-compose.yml`, `docker/` | Axl | 5433 / 8080 |
+| `docker-compose.yml`, `docker/` | Axl | 5433 |
 
 ## Arranque rápido
 
@@ -45,7 +45,7 @@ npm install; npm run dev
 
 - App: http://localhost:3000
 - Swagger de cada servicio: http://localhost:300X/docs
-- Adminer (ver BD): http://localhost:8080 → Sistema PostgreSQL, servidor `postgres`, usuario/clave `kata`
+- Ver/editar datos de un servicio: `npx prisma studio` dentro de `services/ms-moduloX` (se abre en el navegador)
 - Health: http://localhost:300X/health
 
 Demo totalmente containerizada (opcional):

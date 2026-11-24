@@ -66,7 +66,7 @@
 | Repo | **Monorepo GitHub**, una carpeta por servicio | Cada dev toca solo su carpeta |
 | Gestión | Trello / GitHub Projects + Google Docs | Edición simultánea sin conflictos |
 
-**Puertos fijos:** web `3000` · ms-modulo1..4 `3001–3004` · Postgres `5433` (host) · Adminer `8080`.
+**Puertos fijos:** web `3000` · ms-modulo1..4 `3001–3004` · Postgres `5433` (host).
 
 ---
 
@@ -161,10 +161,6 @@ services:
       interval: 3s
       retries: 10
 
-  adminer:
-    image: adminer
-    ports: ["8080:8080"]
-
   # ---- Solo para la demo: docker compose --profile full up --build ----
   ms-modulo1:
     profiles: ["full"]
@@ -209,7 +205,7 @@ CMD ["node", "dist/main.js"]
 **Hoy se hace un build completo una vez** → mañana la caché lo deja en segundos.
 
 ### Etapa 1 – Durante la hackathon (0:00–1:45): Docker solo para la BD
-- `docker compose up -d` → levanta **solo** Postgres + Adminer (los servicios están en el perfil `full`).
+- `docker compose up -d` → levanta **solo** Postgres (los servicios están en el perfil `full`).
 - Cada dev corre su servicio **local** con `npm run start:dev` (hot reload; nada de rebuilds de 30–60 s por cambio).
 - Tablas: `npx prisma db push` + `npx prisma db seed`.
 - `.env` de cada servicio: `DATABASE_URL=postgresql://kata:kata@localhost:5433/db_moduloX`, `PORT=300X`.
@@ -380,7 +376,7 @@ Componentes: `PrintableDocument` (`@media print` + `window.print()`), `Select`, 
 |---|---|---|
 | Jean | `GET /stats` para KPIs | KPIs |
 | Laura | Fixes módulo 4 | — |
-| Elias | Capturas Swagger/Adminer + pegar ER en el informe | Evidencias |
+| Elias | Capturas Swagger/Prisma Studio + pegar ER en el informe | Evidencias |
 | Luciana | Dashboard (M1) conectado | Dashboard |
 | Axl | Merge módulo 4 → **CODE FREEZE** | 100% |
 
@@ -388,7 +384,7 @@ Componentes: `PrintableDocument` (`@media print` + `window.print()`), `Select`, 
 | Quién | Tarea | Entregable |
 |---|---|---|
 | Axl | Sección de arquitectura en el informe (prellenada hoy, solo ajustar); (opcional) `--profile full up --build`; ensayo demo; `git tag v1.0` | Demo + sección arquitectura |
-| Jean, Laura | Capturas Swagger/Postman/Adminer | Evidencias |
+| Jean, Laura | Capturas Swagger/Postman/Prisma Studio | Evidencias |
 | Elias | Conclusiones + bibliografía (GitHub/Trello/Drive) | Cierre |
 | Luciana | Daily #2, retro, mockups finales al informe, exportar PDF y entregar | **Informe** |
 
