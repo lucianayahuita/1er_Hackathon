@@ -66,10 +66,10 @@ npm run build                              # verificar que compila
 9. Código y textos de UI en **español**; seguir el estilo existente (shadcn, Tailwind, componentes de `components/shared`).
 10. Cambios **pequeños y rápidos**: es una hackathon de 2 horas.
 
-## Dominio del kata (completar al minuto 15)
+## Dominio del kata (Startup Chuno – Banca por Internet)
 | # | Módulo (nombre real) | Servicio | Entidad | Regla de negocio |
 |---|---|---|---|---|
-| 1 | | ms-modulo1 | | |
-| 2 | | ms-modulo2 | | |
-| 3 | | ms-modulo3 | | |
-| 4 | | ms-modulo4 | | |
+| 1 | Clientes y Seguridad | ms-modulo1 (Jean) | Cliente | Doc/email únicos, mayor 18 años, baja lógica (`INACTIVO`), credencial inicial con hash |
+| 2 | Cuentas (Ahorro) | ms-modulo2 (Laura) | Cuenta | Saldo no negativo, apertura valida cliente en ms-modulo1, cierre solo con saldo 0 |
+| 3 | Pagos de Servicios | ms-modulo3 (Elias) | Pago | Debita en ms-modulo2, compensación si falla proveedor, comprobante e idempotencia |
+| 4 | Transferencias | ms-modulo4 (Jean/Laura) | Transferencia | Límites diarios/operación, transferencias internas (saga débito/crédito) y ACH |

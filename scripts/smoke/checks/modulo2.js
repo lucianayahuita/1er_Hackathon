@@ -13,7 +13,7 @@ module.exports = {
   run: async (ctx) => {
     const { urls } = ctx;
     const baseUrl = process.env.USE_GATEWAY ? `${urls.gateway}/api/m2` : urls.modulo2;
-    const endpoint = process.env.M2_ENDPOINT || '/registros';
+    const endpoint = process.env.M2_ENDPOINT || (await ctx.isReachable(`${baseUrl}/cuentas`) ? '/cuentas' : '/registros');
 
     let createdId = null;
     let serviceIsAlive = true;

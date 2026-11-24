@@ -13,7 +13,7 @@ module.exports = {
   run: async (ctx) => {
     const { urls } = ctx;
     const baseUrl = process.env.USE_GATEWAY ? `${urls.gateway}/api/m3` : urls.modulo3;
-    const endpoint = process.env.M3_ENDPOINT || '/registros';
+    const endpoint = process.env.M3_ENDPOINT || (await ctx.isReachable(`${baseUrl}/pagos`) ? '/pagos' : '/registros');
 
     let createdId = null;
     let serviceIsAlive = true;
