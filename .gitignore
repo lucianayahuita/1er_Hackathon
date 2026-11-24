@@ -8,3 +8,14 @@ out/
 !.env.example
 .DS_Store
 npm-debug.log*
+
+# Archivos de agentes de IA (instrucciones/memoria locales)
+CLAUDE.md
+CLAUDE.local.md
+AGENTS.md
+GEMINI.md
+.claude/
+.cursor/
+.cursorrules
+.windsurfrules
+.github/copilot-instructions.md
