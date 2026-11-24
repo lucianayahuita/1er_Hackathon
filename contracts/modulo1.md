@@ -35,10 +35,11 @@
 
 ## Reglas de negocio (seguridad)
 - `ci`, `email` y `usuario` únicos → **409** `"El CI ya está registrado"` / `"El email ya está registrado"` / `"El usuario ya existe"`.
-- Password: mínimo 8 caracteres; se guarda **hasheada** con `crypto.scryptSync` de Node (sin dependencias nuevas).
+- Password: mínimo 8 caracteres; se guarda **hasheada** con `crypto.scryptSync` de Node (sin dependencias nuevas) o bcrypt.
 - Login: usuario o password incorrectos → **401** `"Credenciales inválidas"` y `intentosFallidos++`; al llegar a 3 → `bloqueado=true`.
 - Cliente bloqueado o dado de baja → login **403** `"Cliente bloqueado"` / `"Cliente inactivo"`.
 - Respuestas **nunca** incluyen `passwordHash`.
+- Baja lógica: `activo = false`, nunca borrado físico.
 
 ## Ejemplo JSON (POST /clientes)
 ```json

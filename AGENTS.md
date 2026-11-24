@@ -12,7 +12,7 @@ y se adapta al dominio del kata el día de la hackathon. Plan completo: [PLAN_HA
 
 ## Arquitectura
 ```
-Navegador ─► apps/web (Next.js :3000) ── API Gateway: rewrites /api/m1..m5/* → :3001..3005
+Navegador ─► apps/web (Next.js :3000) ── API Gateway: rewrites /api/m1..m4/* → :3001..3004
                 │
   ┌─────────────┼──────────────┬──────────────┐
   ▼             ▼              ▼              ▼
@@ -38,8 +38,7 @@ db_modulo1    db_modulo2     db_modulo3     db_modulo4      (PostgreSQL 16 en Do
 | `services/ms-modulo1/` | Jean | entidad central |
 | `services/ms-modulo2/` | Laura | |
 | `services/ms-modulo3/` | Elias | |
-| `services/ms-modulo4/` | Laura | |
-| `services/ms-modulo5/` | Jean | bonus |
+| `services/ms-modulo4/` | Jean (Laura apoya) | |
 | `services/ms-template/` | — | **referencia, no modificar** |
 | `contracts/moduloX.md` | dueño del servicio | contrato de API; congelado al minuto 25 |
 | `docker-compose.yml`, `docker/`, `apps/web/lib/modules.ts`, `apps/web/next.config.ts`, layout | **solo Axl** | archivos compartidos |
@@ -77,7 +76,7 @@ Entrega: 18:30–20:45 (los últimos 15 min son para subir al LMS el informe con
 | 1 | Clientes | ms-modulo1 :3001 | Cliente | CRUD + baja lógica + **seguridad**: password hasheada, login, bloqueo a los 3 intentos | Jean | Luciana | 75% (con 2) |
 | 2 | Cuentas de ahorro | ms-modulo2 :3002 | Cuenta, Movimiento | Depositar/extraer; saldo insuficiente; cliente debe existir (HTTP a m1) | Laura | Luciana | 75% (con 1) |
 | 3 | Pagos de servicios | ms-modulo3 :3003 | Proveedor, Deuda, Pago | Paga deuda de proveedor externo (simulado) debitando la cuenta (HTTP a m2) | Elias | Axl | 100% (con 4) |
-| 4 | Transferencias | ms-modulo4 :3004 | Transferencia, Banco | Propia / tercero / interbancaria (intermediario simulado, límite Bs 50.000) debitando y acreditando (HTTP a m2) | Laura | Axl | 100% (con 3) |
+| 4 | Transferencias | ms-modulo4 :3004 | Transferencia, Banco | Propia / tercero / interbancaria (intermediario simulado, límite Bs 50.000) debitando y acreditando (HTTP a m2) | Laura / Jean | Axl | 100% (con 3) |
 | 5 | Préstamos (bonus) | ms-modulo5 :3005 | Prestamo | Cuota sistema francés; al aprobar deposita en la cuenta | Jean | Luciana / Axl | +30% |
 
 **Dependencias entre servicios:** Cuentas → Clientes · Pagos → Cuentas · Transferencias → Cuentas · Préstamos → Clientes y Cuentas.

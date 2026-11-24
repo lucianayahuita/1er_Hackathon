@@ -8,7 +8,7 @@
 | Campo | Tipo | Notas |
 |---|---|---|
 | id | int | |
-| codigo | string | único: `DELAPAZ`, `EPSAS`, `ENTEL`, `YPFB`, `TIGO` |
+| codigo | string | único: `DELAPAZ`, `EPSAS`, `ENTEL`, `YPFB`, `TIGO`, `ELFEC`, `SEMAPA` |
 | nombre | string | ej. "DELAPAZ – Electricidad" |
 | categoria | `"LUZ"` \| `"AGUA"` \| `"TELEFONO"` \| `"GAS"` \| `"OTROS"` | |
 
@@ -51,7 +51,7 @@
 3. Debitar: `POST {MS_MODULO2_URL}/cuentas/:cuentaId/extraer` con `{ monto, descripcion: "Pago <proveedor> <periodo>" }`.
    - Si Cuentas responde error (ej. saldo insuficiente) → guardar Pago `RECHAZADO` y responder **400** con el mensaje de Cuentas.
 4. Marcar deuda `pagada=true`, guardar Pago `COMPLETADO` con comprobante.
-- Variable nueva en `.env`: `MS_MODULO2_URL=http://localhost:3002` (crear `src/integracion/modulo2.client.ts` copiando `modulo1.client.ts`).
+- Variable en `.env`: `MS_MODULO2_URL=http://localhost:3002` (usar `src/integracion/modulo2.client.ts`).
 
 ## Ejemplo JSON
 ```json

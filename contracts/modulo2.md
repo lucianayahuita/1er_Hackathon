@@ -53,6 +53,7 @@
 ```json
 // POST /cuentas
 { "clienteId": 1, "moneda": "BOB" }
+
 // POST /cuentas/1/depositar
 { "monto": 1500, "descripcion": "Depósito en ventanilla" }
 ```
