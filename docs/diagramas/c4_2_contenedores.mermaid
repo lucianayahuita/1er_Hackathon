@@ -1,0 +1,42 @@
+C4Container
+    title Nivel 2 - Contenedores del Sistema Integral de Gestión Logística
+
+    Person(usr, "Usuarios internos", "Operador, Administrador de flota, Despachador, Conductor, Gerencia")
+    Person(dest, "Destinatario", "Consulta seguimiento público")
+
+    System_Boundary(sis, "Sistema Integral de Gestión Logística") {
+        Container(spa, "Aplicación web (SPA)", "Angular", "Dashboard, panel de operaciones y formularios de gestión. Interfaz adaptable a móvil")
+        Container(gw, "API Gateway / BFF", "Node.js + Express", "Punto único de entrada, autenticación JWT, enrutamiento y agregación de KPIs del dashboard")
+
+        Container(msenv, "MS-Envíos", "Node.js + Express", "Registro de envíos, código de seguimiento, estados e historial")
+        Container(msflo, "MS-Flota", "Node.js + Express", "Gestión de vehículos, disponibilidad y estado operativo")
+        Container(mscon, "MS-Conductores", "Node.js + Express", "Conductores, licencias, vigencia y asignaciones")
+        Container(msent, "MS-Entregas", "Node.js + Express", "Confirmación de entrega, evidencia fotográfica y comprobante digital")
+
+        ContainerDb(dbenv, "BD Envíos", "PostgreSQL (esquema envios)", "envio, contacto, estado_envio, historial_estado_envio")
+        ContainerDb(dbflo, "BD Flota", "PostgreSQL (esquema flota)", "vehiculo, estado_vehiculo, historial_estado_vehiculo")
+        ContainerDb(dbcon, "BD Conductores", "PostgreSQL (esquema conductores)", "conductor, licencia, categoria_licencia, asignacion")
+        ContainerDb(dbent, "BD Entregas", "PostgreSQL (esquema entregas)", "entrega, evidencia_foto, comprobante")
+        Container(files, "Almacén de archivos", "Sistema de archivos / volumen", "Fotos de evidencia y PDFs de comprobantes")
+    }
+
+    Rel(usr, spa, "Usa", "HTTPS")
+    Rel(dest, spa, "Consulta seguimiento", "HTTPS")
+    Rel(spa, gw, "Consume API", "JSON/HTTPS")
+
+    Rel(gw, msenv, "Enruta /envios", "REST/JSON")
+    Rel(gw, msflo, "Enruta /vehiculos", "REST/JSON")
+    Rel(gw, mscon, "Enruta /conductores, /asignaciones", "REST/JSON")
+    Rel(gw, msent, "Enruta /entregas", "REST/JSON")
+
+    Rel(mscon, msenv, "Valida y actualiza estado del envío", "REST/JSON")
+    Rel(mscon, msflo, "Valida y actualiza estado del vehículo", "REST/JSON")
+    Rel(msent, msenv, "Valida y marca envío como ENTREGADO", "REST/JSON")
+    Rel(msent, mscon, "Finaliza asignación", "REST/JSON")
+    Rel(msent, msflo, "Libera vehículo", "REST/JSON")
+
+    Rel(msenv, dbenv, "Lee/escribe", "SQL")
+    Rel(msflo, dbflo, "Lee/escribe", "SQL")
+    Rel(mscon, dbcon, "Lee/escribe", "SQL")
+    Rel(msent, dbent, "Lee/escribe", "SQL")
+    Rel(msent, files, "Guarda evidencias y comprobantes", "I/O")

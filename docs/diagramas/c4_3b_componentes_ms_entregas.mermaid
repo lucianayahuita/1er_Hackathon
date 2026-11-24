@@ -1,0 +1,37 @@
+C4Component
+    title Nivel 3 - Componentes de MS-Entregas
+
+    Container(gw, "API Gateway / BFF", "Node.js + Express", "Entrada de peticiones")
+    Container(msenv, "MS-Envíos", "Node.js + Express", "Estado de envíos")
+    Container(mscon, "MS-Conductores", "Node.js + Express", "Asignaciones")
+    Container(msflo, "MS-Flota", "Node.js + Express", "Estado de vehículos")
+    ContainerDb(db, "BD Entregas", "PostgreSQL", "Esquema entregas")
+    Container(files, "Almacén de archivos", "Volumen", "Fotos y PDFs")
+
+    Container_Boundary(ms, "MS-Entregas") {
+        Component(ectrl, "EntregaController", "Express Router", "Confirmar entrega, consultar historial")
+        Component(evctrl, "EvidenciaController", "Express Router + Multer", "Carga y consulta de fotos")
+        Component(ccrtl, "ComprobanteController", "Express Router", "Datos y descarga del comprobante PDF")
+        Component(esvc, "EntregaService", "Servicio de dominio", "Valida envío EN_TRANSITO, evita doble confirmación, coordina la saga")
+        Component(pdf, "ComprobanteGenerator", "Generador PDF", "Genera el comprobante digital y su número único")
+        Component(storage, "FileStorageAdapter", "Adaptador", "Guarda y recupera archivos")
+        Component(erepo, "EntregaRepository", "Acceso a datos", "entrega, evidencia_foto, comprobante")
+        Component(cl, "IntegracionClients", "HTTP clients", "Clientes de Envíos, Conductores y Flota")
+    }
+
+    Rel(gw, ectrl, "Invoca", "REST")
+    Rel(gw, evctrl, "Invoca", "REST")
+    Rel(gw, ccrtl, "Invoca", "REST")
+    Rel(ectrl, esvc, "Usa")
+    Rel(evctrl, esvc, "Usa")
+    Rel(ccrtl, pdf, "Usa")
+    Rel(esvc, pdf, "Genera comprobante")
+    Rel(esvc, erepo, "Persiste")
+    Rel(esvc, storage, "Guarda evidencia")
+    Rel(esvc, cl, "Actualiza otros servicios")
+    Rel(pdf, storage, "Guarda PDF")
+    Rel(erepo, db, "Lee/escribe", "SQL")
+    Rel(storage, files, "I/O")
+    Rel(cl, msenv, "PATCH estado ENTREGADO", "REST")
+    Rel(cl, mscon, "PATCH finalizar asignación", "REST")
+    Rel(cl, msflo, "PATCH estado DISPONIBLE", "REST")
