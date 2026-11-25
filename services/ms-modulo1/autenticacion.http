@@ -1,0 +1,65 @@
+@baseUrl = http://localhost:3001
+@clienteId = 1
+@token = pegar-access_token-del-login
+@serviceKey = configurar-INTERNAL_API_KEY-del-servidor
+
+# Ampliación del contrato de módulo 1 solicitada para JWT y roles.
+# Cliente incorpora rol ADMIN/CLIENTE; el registro público SIEMPRE crea CLIENTE.
+# No se admite modificar rol, password ni estados por POST/PATCH de perfil.
+# Login añade rol, access_token, token_type y expires_in a sus campos anteriores.
+# Permisos:
+# - Públicos: GET /health, POST /clientes, POST /clientes/login.
+# - ADMIN: listar/buscar, estadísticas, baja y desbloqueo; consultar/editar cualquiera.
+# - CLIENTE: consultar y editar únicamente su propio ID.
+# - Microservicios: solo GET /clientes/:id mediante X-Service-Key.
+# Falta de token/token inválido o expirado: 401; falta de permiso/bloqueado/inactivo: 403.
+# Los tokens duran JWT_TTL_SECONDS (3600 por defecto). Estado/rol se revisan en BD.
+# JWT_SECRET firma los tokens y no se comparte con el navegador ni otros servicios.
+# Bootstrap de administrador: configurar ADMIN_USUARIO/ADMIN_PASSWORD y ejecutar db:setup.
+# El seed conserva la contraseña y el estado de un administrador existente.
+# Swagger: POST /clientes/login -> copiar access_token -> Authorize -> pegar solo el token.
+# Para los demás módulos: añadir X-Service-Key con INTERNAL_API_KEY al consultar clientes.
+# La antigua X-Admin-Key ya no permite desbloquear: se requiere un JWT de ADMIN.
+
+### Login de ADMIN: sustituir por ADMIN_USUARIO y ADMIN_PASSWORD de .env
+POST {{baseUrl}}/clientes/login
+Content-Type: application/json
+
+{ "usuario": "admin", "password": "valor-de-ADMIN_PASSWORD" }
+
+### Login de CLIENTE de ejemplo
+POST {{baseUrl}}/clientes/login
+Content-Type: application/json
+
+{ "usuario": "mquispe", "password": "Segura2026" }
+
+### Listar (ADMIN)
+GET {{baseUrl}}/clientes?q=Quispe&activo=true
+Authorization: Bearer {{token}}
+
+### Consultar (ADMIN o cliente titular)
+GET {{baseUrl}}/clientes/{{clienteId}}
+Authorization: Bearer {{token}}
+
+### Editar (ADMIN o cliente titular)
+PATCH {{baseUrl}}/clientes/{{clienteId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "telefono": "76543210" }
+
+### Desbloquear (ADMIN)
+PATCH {{baseUrl}}/clientes/{{clienteId}}/desbloquear
+Authorization: Bearer {{token}}
+
+### Baja lógica (ADMIN)
+PATCH {{baseUrl}}/clientes/{{clienteId}}/baja
+Authorization: Bearer {{token}}
+
+### Estadísticas (ADMIN)
+GET {{baseUrl}}/clientes/stats
+Authorization: Bearer {{token}}
+
+### Consulta desde Cuentas/Préstamos (sin JWT del usuario)
+GET {{baseUrl}}/clientes/{{clienteId}}
+X-Service-Key: {{serviceKey}}

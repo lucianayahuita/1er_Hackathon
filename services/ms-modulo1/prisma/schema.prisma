@@ -1,5 +1,4 @@
-// Módulo 1 – entidad central
-// TODO mañana: renombrar el modelo "Registro" a la entidad real del kata.
+// Clientes: entidad central de Chuno Banca. BD exclusiva del servicio.
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,15 +8,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Registro {
-  id          Int      @id @default(autoincrement())
-  codigo      String   @unique
-  nombre      String
-  descripcion String?
-  categoria   String   @default("General")
-  monto       Decimal  @default(0) @db.Decimal(12, 2)
-  fecha       DateTime @default(now())
-  activo      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+enum Rol {
+  ADMIN
+  CLIENTE
+}
+
+model Cliente {
+  id               Int      @id @default(autoincrement())
+  ci               String   @unique
+  nombres          String
+  apellidos        String
+  email            String   @unique
+  telefono         String?
+  direccion        String?
+  usuario          String   @unique
+  passwordHash     String
+  rol              Rol      @default(CLIENTE)
+  intentosFallidos Int      @default(0)
+  bloqueado        Boolean  @default(false)
+  activo           Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
