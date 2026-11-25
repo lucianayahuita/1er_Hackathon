@@ -64,33 +64,45 @@ export default function Modulo4TransferenciasPage() {
 
   // Carga inicial intentando backend con fallback seguro
   useEffect(() => {
-    // Bancos
-    api.get<Banco[]>("m4", "/bancos")
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setBancos(data);
-      })
-      .catch(() => {});
+    // Carga inicial
+    const cargarDatos = async () => {
+      // 1. Bancos desde backend o mock
+      try {
+        const dataBancos = await api.get<Banco[]>("m4", "/bancos");
+        if (Array.isArray(dataBancos) && dataBancos.length > 0) {
+          setBancos(dataBancos);
+          const primerExterno = dataBancos.find((b) => b.codigo !== "CHUNO") || dataBancos[0];
+          if (primerExterno) setBancoDestinoSel(primerExterno.codigo);
+        }
+      } catch {}
 
-    // Historial transferencias
-    api.get<Transferencia[]>("m4", "/transferencias")
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setTransferencias(data);
-      })
-      .catch(() => {});
+      // 2. Historial de transferencias
+      try {
+        const dataTrf = await api.get<Transferencia[]>("m4", "/transferencias");
+        if (Array.isArray(dataTrf) && dataTrf.length > 0) {
+          setTransferencias(dataTrf);
+        }
+      } catch {}
 
-    // Clientes de ms-modulo1
-    api.get<ClienteOption[]>("m1", "/clientes?activo=true")
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setClientes(data);
-      })
-      .catch(() => {});
+      // 3. Clientes de ms-modulo1
+      try {
+        const dataClientes = await api.get<ClienteOption[]>("m1", "/clientes?activo=true");
+        if (Array.isArray(dataClientes) && dataClientes.length > 0) {
+          setClientes(dataClientes);
+          setClienteIdSel(String(dataClientes[0].id));
+        }
+      } catch {}
 
-    // Cuentas de ms-modulo2
-    api.get<CuentaOption[]>("m2", "/cuentas?activo=true")
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setCuentas(data);
-      })
-      .catch(() => {});
+      // 4. Cuentas de ms-modulo2
+      try {
+        const dataCuentas = await api.get<CuentaOption[]>("m2", "/cuentas?activo=true");
+        if (Array.isArray(dataCuentas) && dataCuentas.length > 0) {
+          setCuentas(dataCuentas);
+        }
+      } catch {}
+    };
+
+    cargarDatos();
   }, []);
 
   // Cuentas del cliente actual
@@ -230,6 +242,13 @@ export default function Modulo4TransferenciasPage() {
         titularDestino: titularDestinoFinal,
         bancoDestino: bancoDestinoFinal,
       });
+
+      // Refrescar cuentas reales si el backend de cuentas está arriba
+      api.get<CuentaOption[]>("m2", "/cuentas?activo=true")
+        .then((ctas) => {
+          if (Array.isArray(ctas) && ctas.length > 0) setCuentas(ctas);
+        })
+        .catch(() => {});
     } catch {
       // Fallback Mock Transaction
       const codigoAchGenerado =
