@@ -6,21 +6,22 @@ import { Building2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { APP_NAME, APP_SUBTITLE, NAV } from "@/lib/modules";
 
-export function AppSidebar() {
+/** Sidebar fijo con las secciones que el rol puede ver (las recibe de AppShell). */
+export function AppSidebar({ items = NAV }: { items?: typeof NAV }) {
   const pathname = usePathname();
   return (
-    <aside className="hidden w-64 shrink-0 flex-col bg-slate-950 text-slate-100 md:flex print:hidden">
+    <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col overflow-y-auto bg-slate-950 text-slate-100 md:flex print:hidden">
       <div className="flex items-center gap-3 px-6 py-5">
-        <div className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+        <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white">
           <Building2 className="size-5" />
         </div>
-        <div>
+        <div className="min-w-0">
           <p className="font-semibold leading-tight">{APP_NAME}</p>
-          <p className="text-xs text-slate-400">{APP_SUBTITLE}</p>
+          <p className="text-xs leading-snug text-slate-400">{APP_SUBTITLE}</p>
         </div>
       </div>
       <nav className="flex flex-1 flex-col gap-1 px-3 py-2">
-        {NAV.map((item) => {
+        {items.map((item) => {
           const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
           const Icon = item.icon;
           return (
