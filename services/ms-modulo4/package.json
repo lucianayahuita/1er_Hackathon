@@ -6,6 +6,7 @@
     "build": "nest build",
     "start": "node dist/main.js",
     "start:dev": "nest start --watch",
+    "test": "node --test test/*.test.cjs",
     "db:push": "prisma db push",
     "db:seed": "prisma db seed",
     "db:setup": "prisma db push && prisma db seed"

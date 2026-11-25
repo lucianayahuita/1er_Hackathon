@@ -14,10 +14,11 @@ export interface Transferencia {
   cuentaDestinoNumero: string;
   bancoDestino?: string | null;
   titularDestino?: string | null;
-  monto: number;
+  monto: number | string;
   glosa: string;
   estado: "COMPLETADA" | "RECHAZADA" | "PENDIENTE";
   codigoAch?: string | null;
+  claveIdempotencia?: string | null;
   fecha: string;
   // Campos enriquecidos para vista
   cuentaOrigenNumero?: string;

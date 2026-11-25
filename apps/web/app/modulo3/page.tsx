@@ -90,7 +90,16 @@ export default function Modulo3PagosPage() {
     // Historial de pagos
     api.get<Pago[]>("m3", "/pagos")
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setPagos(data);
+        if (Array.isArray(data) && data.length > 0) {
+          const normalizados: Pago[] = data.map((p) => ({
+            ...p,
+            proveedorNombre: p.proveedorNombre || p.deuda?.proveedor?.nombre,
+            proveedorCategoria: p.proveedorCategoria || p.deuda?.proveedor?.categoria,
+            codigoCliente: p.codigoCliente || p.deuda?.codigoCliente,
+            periodo: p.periodo || p.deuda?.periodo,
+          }));
+          setPagos(normalizados);
+        }
       })
       .catch(() => {});
 
@@ -141,10 +150,16 @@ export default function Modulo3PagosPage() {
         "m3",
         `/proveedores/${proveedorSeleccionado.id}/deudas?codigoCliente=${encodeURIComponent(codigoClienteInput.trim())}`
       );
-      if (Array.isArray(res) && res.length > 0) {
-        setDeudasEncontradas(res);
-        setDeudaSeleccionada(res[0]);
-        toast.success(`Se encontraron ${res.length} factura(s) pendiente(s)`);
+      if (Array.isArray(res)) {
+        if (res.length > 0) {
+          setDeudasEncontradas(res);
+          setDeudaSeleccionada(res[0]);
+          toast.success(`Se encontraron ${res.length} factura(s) pendiente(s)`);
+        } else {
+          setDeudasEncontradas([]);
+          setDeudaSeleccionada(null);
+          toast.info("No se encontraron deudas pendientes para el código ingresado");
+        }
         return;
       }
     } catch {}

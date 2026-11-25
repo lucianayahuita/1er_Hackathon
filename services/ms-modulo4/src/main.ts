@@ -9,8 +9,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
   const config = new DocumentBuilder()
-    .setTitle('ms-modulo4')
-    .setDescription('Módulo 4')
+    .setTitle('Startup Chuno - Transferencias')
+    .setDescription('Módulo 4: transferencias propias, a terceros e interbancarias (ACH)')
     .setVersion('0.1.0')
     .build();
   SwaggerModule.setup('docs', app, SwaggerModule.createDocument(app, config));
