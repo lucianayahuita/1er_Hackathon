@@ -21,9 +21,10 @@ export interface Pago {
   clienteId: number;
   cuentaId: number;
   deudaId: number;
-  monto: number;
+  monto: number | string;
   comprobante: string;
   estado: "COMPLETADO" | "RECHAZADO";
+  motivo?: string | null;
   fecha: string;
   // Campos enriquecidos para la vista
   proveedorNombre?: string;
@@ -32,6 +33,14 @@ export interface Pago {
   periodo?: string;
   cuentaNumero?: string;
   clienteNombre?: string;
+  deuda?: {
+    codigoCliente?: string;
+    periodo?: string;
+    proveedor?: {
+      nombre?: string;
+      categoria?: string;
+    };
+  };
 }
 
 export interface ClienteOption {
