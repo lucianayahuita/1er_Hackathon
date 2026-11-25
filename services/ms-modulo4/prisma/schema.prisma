@@ -1,5 +1,3 @@
-// Módulo 4
-// TODO mañana: renombrar el modelo "Registro" a la entidad real del kata.
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,15 +7,40 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Registro {
-  id          Int      @id @default(autoincrement())
-  codigo      String   @unique
-  nombre      String
-  descripcion String?
-  categoria   String   @default("General")
-  monto       Decimal  @default(0) @db.Decimal(12, 2)
-  fecha       DateTime @default(now())
-  activo      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+enum TipoTransferencia {
+  PROPIA
+  TERCERO
+  INTERBANCARIA
+}
+
+enum EstadoTransferencia {
+  COMPLETADA
+  RECHAZADA
+  PENDIENTE
+}
+
+model Banco {
+  id     Int    @id @default(autoincrement())
+  codigo String @unique
+  nombre String
+}
+
+model Transferencia {
+  id                  Int                 @id @default(autoincrement())
+  tipo                TipoTransferencia
+  clienteId           Int
+  cuentaOrigenId      Int
+  cuentaDestinoNumero String
+  bancoDestino        String?
+  titularDestino      String?
+  monto               Decimal             @db.Decimal(14, 2)
+  glosa               String
+  estado              EstadoTransferencia @default(PENDIENTE)
+  codigoAch           String?             @unique
+  claveIdempotencia   String?             @unique
+  fecha               DateTime            @default(now())
+
+  @@index([clienteId, fecha])
+  @@index([cuentaOrigenId, fecha])
+  @@index([estado, tipo])
 }
