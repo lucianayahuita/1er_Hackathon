@@ -13,9 +13,10 @@ prisma/schema.prisma        ← modelo de datos (renombrar `Registro` a la entid
 prisma/seed.ts              ← datos de ejemplo realistas
 src/main.ts                 ← bootstrap, Swagger (/docs), ValidationPipe, CORS
 src/health.controller.ts    ← GET /health
-src/registros/              ← módulo CRUD (controller, service, dto) – base a adaptar
-src/integracion/            ← cliente HTTP a ms-modulo1 (si existe en este servicio)
-.env.example                ← PORT, DATABASE_URL, MS_MODULO1_URL, MS_MODULO2_URL
+src/proveedores/            ← catálogo y consulta de deudas pendientes
+src/pagos/                  ← pagos, comprobantes, historial y estadísticas
+src/integracion/            ← clientes HTTP a ms-modulo1 y ms-modulo2
+.env.example                ← PORT, DATABASE_URL, MS_MODULO1_URL, MS_MODULO2_URL, MOCK_MODULO2, MS_TIMEOUT_MS
 ```
 
 ## Comandos
@@ -52,11 +53,11 @@ npx prisma studio     # ver/editar datos
 > **Kata de hoy:** Banca por Internet – STARTUP CHUNO (24/11/2026). Ver `AGENTS.md` raíz y `contracts/`.
 
 ## Mis tareas – Elias · PAGOS DE SERVICIOS (contrato: `contracts/modulo3.md`)
-- [ ] `prisma/schema.prisma`: `Proveedor`, `Deuda` (simula el sistema externo), `Pago` (clienteId, cuentaId, deudaId, monto, comprobante único, estado, fecha).
-- [ ] Seed: proveedores DELAPAZ (LUZ), EPSAS (AGUA), ENTEL (TELEFONO), YPFB (GAS), TIGO (OTROS) y ~15 deudas pendientes con códigos `MED-10001`… y periodos `2026-09/10/11`.
-- [ ] `src/integracion/modulo2.client.ts` (copiar `modulo1.client.ts`, usar `MS_MODULO2_URL`) con `obtenerCuenta(id)` y `extraer(id, monto, descripcion)`; agregar `MS_MODULO2_URL=http://localhost:3002` a `.env` y `.env.example`.
-- [ ] Endpoints: GET /proveedores, GET /proveedores/:id/deudas?codigoCliente=, POST /pagos, GET /pagos?clienteId=, GET /pagos/:id, GET /pagos/stats.
-- [ ] POST /pagos: deuda pendiente → cuenta del cliente → `extraer` en Cuentas → si falla guarda RECHAZADO y 400 con el mensaje → si ok marca deuda pagada y guarda COMPLETADO con comprobante `PAG-AAAAMMDD-0001`.
+- [x] `prisma/schema.prisma`: `Proveedor`, `Deuda` (simula el sistema externo), `Pago` (clienteId, cuentaId, deudaId, monto, comprobante único, estado, fecha).
+- [x] Seed: proveedores DELAPAZ, ELFEC, EPSAS, SEMAPA, ENTEL, YPFB y TIGO y deudas pendientes con códigos `MED-10001`… y periodos `2026-09/10/11`.
+- [x] `src/integracion/modulo2.client.ts` con `obtenerCuenta(id)`, `extraer(id, monto, descripcion)` y compensación `depositar(...)`.
+- [x] Endpoints: GET /proveedores, GET /proveedores/:id/deudas?codigoCliente=, POST /pagos, GET /pagos?clienteId=, GET /pagos/:id, GET /pagos/stats.
+- [x] POST /pagos: deuda pendiente → cuenta del cliente → `extraer` en Cuentas → si falla guarda RECHAZADO y 400 con el mensaje → si ok marca deuda pagada y guarda COMPLETADO con comprobante `PAG-AAAAMMDD-0001`.
 - [ ] Mientras Cuentas no esté listo: probar con un mock (devolver saldo suficiente) y cambiar al real a las 1:05.
 - [ ] **PR a las 1:10** (19:40).
 - [ ] **Informe (1:15 en adelante):** sección de Arquitectura (microservicios, BD por servicio, API Gateway, integración con servicios externos simulados) + tabla de endpoints y reglas de los 4 servicios + capturas de Swagger.
