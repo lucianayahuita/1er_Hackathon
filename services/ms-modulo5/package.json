@@ -3,9 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prisma:generate": "prisma generate",
+    "prebuild": "npm run prisma:generate",
     "build": "nest build",
     "start": "node dist/main.js",
+    "prestart:dev": "npm run prisma:generate",
     "start:dev": "nest start --watch",
+    "test:integracion": "node --test test/prestamos.e2e.cjs",
     "db:push": "prisma db push",
     "db:seed": "prisma db seed",
     "db:setup": "prisma db push && prisma db seed"

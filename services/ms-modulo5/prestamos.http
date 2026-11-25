@@ -1,0 +1,58 @@
+@baseUrl = http://localhost:3005
+@token = access_token-obtenido-en-el-login-de-Clientes
+@prestamoId = 1
+
+# Ampliación de seguridad: todas las rutas /prestamos requieren Authorization Bearer.
+# El JWT se valida por HTTP en Clientes, que verifica firma, vigencia, rol y estado.
+# No compartir JWT_SECRET entre servicios ni instalar dependencias adicionales.
+# ADMIN puede gestionar cualquier préstamo; CLIENTE solo los suyos.
+# Estadísticas, aprobación y rechazo son exclusivos de ADMIN.
+# GET /health y /docs permanecen públicos.
+# INTERNAL_API_KEY debe coincidir con Clientes para validar al beneficiario.
+# Los clientes HTTP tienen un límite de espera de 1500 ms por solicitud.
+# PATCH admite campos omitidos, pero rechaza nulos y propiedades desconocidas.
+
+### Solicitar (CLIENTE solo puede usar su propio clienteId; ADMIN puede usar cualquiera)
+POST {{baseUrl}}/prestamos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "clienteId": 1, "cuentaDesembolsoId": 1, "monto": 25000, "tasaAnual": 12, "plazoMeses": 24 }
+
+### Listar (CLIENTE recibe únicamente sus préstamos)
+GET {{baseUrl}}/prestamos
+Authorization: Bearer {{token}}
+
+### Editar parcialmente (solo SOLICITADO y activo)
+PATCH {{baseUrl}}/prestamos/{{prestamoId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "monto": 30000 }
+
+### Aprobar (ADMIN)
+# Se revalida cliente activo y cuenta del cliente antes de reservar el desembolso.
+# Una transición atómica SOLICITADO -> APROBADO evita llamadas de depósito simultáneas.
+# Si el depósito y la persistencia se confirman: DESEMBOLSADO.
+# Repetir aprobación de DESEMBOLSADO devuelve el préstamo sin otro depósito.
+# APROBADO devuelve 409: operación en curso o pendiente de conciliación.
+# Si falla el depósito, hay timeout o falla guardar el resultado: 503 y queda APROBADO.
+# Ese estado NO se revierte automáticamente, porque Cuentas no ofrece idempotencia.
+# Para conciliar: el equipo debe verificar en Cuentas el movimiento DEPOSITO con
+# descripción "Desembolso préstamo #<id>", cuenta y monto. No modificar el estado
+# ni repetir un depósito sin comprobar su resultado en Cuentas.
+# La recuperación automática requiere acordar idempotencia con el dueño de Cuentas.
+PATCH {{baseUrl}}/prestamos/{{prestamoId}}/aprobar
+Authorization: Bearer {{token}}
+
+### Rechazar (ADMIN; solo SOLICITADO y activo)
+PATCH {{baseUrl}}/prestamos/{{prestamoId}}/rechazar
+Authorization: Bearer {{token}}
+
+### Baja lógica (propietario o ADMIN; no permite desembolso iniciado)
+PATCH {{baseUrl}}/prestamos/{{prestamoId}}/baja
+Authorization: Bearer {{token}}
+
+### Estadísticas (ADMIN)
+GET {{baseUrl}}/prestamos/stats
+Authorization: Bearer {{token}}
