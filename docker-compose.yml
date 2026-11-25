@@ -28,6 +28,8 @@ services:
     environment:
       PORT: 3001
       DATABASE_URL: postgresql://kata:kata@postgres:5432/db_modulo1
+      JWT_SECRET: super_secreto_chuno_banca_2026_seguro_min32bytes
+      INTERNAL_API_KEY: chuno_internal_service_key_2026
     ports: ["3001:3001"]
 
   ms-modulo2:
