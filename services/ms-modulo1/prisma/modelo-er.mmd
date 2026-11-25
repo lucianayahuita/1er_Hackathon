@@ -1,0 +1,20 @@
+erDiagram
+    CLIENTE {
+        int id PK
+        string ci UK
+        string nombres
+        string apellidos
+        string email UK
+        string telefono "Opcional"
+        string direccion "Opcional"
+        string usuario UK
+        string passwordHash "Salt y hash scrypt; nunca se expone"
+        enum rol "ADMIN o CLIENTE; default CLIENTE"
+        int intentosFallidos "Default 0; consecutivos"
+        boolean bloqueado "Default false; true al tercer fallo"
+        boolean activo "Default true; baja lógica"
+        datetime createdAt
+        datetime updatedAt
+    }
+%% Entidad local única. Los demás servicios referencian clienteId por HTTP.
+%% Rol es un enum de PostgreSQL; no es otra entidad ni una tabla compartida.
